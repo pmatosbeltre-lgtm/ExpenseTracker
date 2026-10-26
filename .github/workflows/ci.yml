@@ -1,0 +1,39 @@
+name: CI - Integración Continua
+
+on:
+  push:
+    branches: [ "testing", "main" ]
+  pull_request:
+    branches: [ "testing", "main" ]
+
+jobs:
+  build-and-test:
+    name: Probar y Construir Contenedores
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Obtener el código fuente del repositorio
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2. Configurar Python y verificar sintaxis del Backend
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias del Backend y verificar
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 3. Validar la construcción del contenedor Backend en Docker
+      - name: Build Docker Backend
+        run: |
+          docker build -t test-backend ./backend
+
+      # 4. Validar la construcción del contenedor Frontend en Docker
+      - name: Build Docker Frontend
+        run: |
+          docker build -t test-frontend ./frontend
