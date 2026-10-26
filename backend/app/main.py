@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -10,6 +11,15 @@ from app.schemas import GastoCreate, GastoResponse
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Control de Gastos API")
+
+# Habilitar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En producción puedes restringirlo a tu dominio
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependencia para obtener la sesión de la BD en cada petición
 def get_db():
