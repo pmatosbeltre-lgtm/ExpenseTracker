@@ -38,14 +38,17 @@ jobs:
       # 5. Construir y subir imagen del Frontend
       - name: Build & Push Frontend
         run: |
-          IMAGE_TAG=${{ github.ref == 'refs/heads/main' && 'prod' || 'test' }}
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            IMAGE_TAG="prod"
+            BACKEND_URL="https://app-backend-main.ambitiousdune-385a29b9.eastus.azurecontainerapps.io/gastos"
+          else
+            IMAGE_TAG="test"
+            BACKEND_URL="https://app-backend-testing.ambitiousdune-385a29b9.eastus.azurecontainerapps.io/gastos"
+          fi
 
-          IF_MAIN="https://app-backend-main.ambitiousdune-385a29b9.eastus.azurecontainerapps.io/gastos"
-          IF_TEST="https://app-backend-testing.ambitiousdune-385a29b9.eastus.azurecontainerapps.io/gastos"
-          
-          BACKEND_URL=${{ github.ref == 'refs/heads/main' && '$IF_MAIN' || '$IF_TEST' }}
+          echo "Compilando Frontend para entorno $IMAGE_TAG apuntando a $BACKEND_URL"
 
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/gastos-frontend:$IMAGE_TAG ./frontend
+          docker build --build-arg VITE_API_URL=$BACKEND_URL -t ${{ secrets.ACR_LOGIN_SERVER }}/gastos-frontend:$IMAGE_TAG ./frontend
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/gastos-frontend:$IMAGE_TAG
 
       # 6. Desplegar según la rama activa
