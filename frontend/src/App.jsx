@@ -9,6 +9,7 @@ function App() {
   const [editandoId, setEditandoId] = useState(null);
   const [form, setForm] = useState({
     concepto: '',
+    concepto2: '',
     monto: '',
     tipo: 'gasto',
     fecha: new Date().toISOString().split('T')[0]
@@ -39,6 +40,7 @@ function App() {
     try {
       const payload = {
         concepto: form.concepto,
+        concepto2: form.concepto2,
         monto: parseFloat(form.monto),
         tipo: form.tipo,
         fecha: form.fecha
@@ -53,7 +55,7 @@ function App() {
         await axios.post(API_URL, payload);
       }
 
-      setForm({ concepto: '', monto: '', tipo: 'gasto', fecha: new Date().toISOString().split('T')[0] });
+      setForm({ concepto: '', concepto2: '', monto: '', tipo: 'gasto', fecha: new Date().toISOString().split('T')[0] });
       obtenerGastos();
     } catch (err) {
       console.error("Error al guardar gasto:", err);
@@ -65,6 +67,7 @@ function App() {
     setEditandoId(gasto.id);
     setForm({
       concepto: gasto.concepto,
+      concepto2: gasto.concepto2 || '',
       monto: gasto.monto,
       tipo: gasto.tipo,
       fecha: gasto.fecha
@@ -74,7 +77,7 @@ function App() {
   // 5. Cancelar edición
   const handleCancelEdit = () => {
     setEditandoId(null);
-    setForm({ concepto: '', monto: '', tipo: 'gasto', fecha: new Date().toISOString().split('T')[0] });
+    setForm({ concepto: '', concepto2: '', monto: '', tipo: 'gasto', fecha: new Date().toISOString().split('T')[0] });
   };
 
   // 6. Eliminar un gasto (DELETE)
@@ -118,6 +121,12 @@ function App() {
             required
           />
           <input
+            name="concepto2"
+            placeholder="Concepto 2 (opcional)"
+            value={form.concepto2}
+            onChange={handleChange}
+          />
+          <input
             name="monto"
             type="number"
             step="0.01"
@@ -156,6 +165,7 @@ function App() {
           <thead>
             <tr>
               <th>Concepto</th>
+              <th>Concepto 2</th>
               <th>Monto</th>
               <th>Tipo</th>
               <th>Fecha</th>
@@ -165,7 +175,7 @@ function App() {
           <tbody>
             {gastos.length === 0 ? (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>
+                <td colSpan="6" style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>
                   No hay movimientos registrados.
                 </td>
               </tr>
@@ -173,6 +183,7 @@ function App() {
               gastos.map((g) => (
                 <tr key={g.id}>
                   <td><strong>{g.concepto}</strong></td>
+                  <td>{g.concepto2 || '—'}</td>
                   <td style={{ fontWeight: '600', color: g.tipo === 'ingreso' ? 'var(--accent-green)' : 'var(--accent-red)' }}>
                     {g.tipo === 'ingreso' ? '+' : '-'}${g.monto.toFixed(2)}
                   </td>

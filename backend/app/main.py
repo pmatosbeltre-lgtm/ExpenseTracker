@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -9,6 +10,12 @@ from app.schemas import GastoCreate, GastoResponse
 
 # Crea las tablas en PostgreSQL si no existen
 Base.metadata.create_all(bind=engine)
+
+# create_all no modifica tablas existentes: agrega la columna de forma segura
+# al iniciar para instalaciones que ya tenían datos.
+with engine.begin() as connection:
+    connection.execute(text("ALTER TABLE gastos ADD COLUMN IF NOT EXISTS concepto2 VARCHAR"))
+    connection.execute(text("UPDATE gastos SET concepto2 = '' WHERE concepto2 IS NULL"))
 
 app = FastAPI(title="Control de Gastos API")
 
