@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/gastos';
+const API_URL = import.meta.env.VITE_API_URL || 'https://app-backend-testing.ambitiousdune-385a29b9.eastus.azurecontainerapps.io/gastos';
 
 function App() {
   const [gastos, setGastos] = useState([]);

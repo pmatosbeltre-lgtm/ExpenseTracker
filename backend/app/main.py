@@ -15,7 +15,9 @@ app = FastAPI(title="Control de Gastos API")
 # Habilitar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción puedes restringirlo a tu dominio
+    allow_origins=["https://app-frontend-testing.ambitiousdune-385a29b9.eastus.azurecontainerapps.io",
+    "https://app-frontend-main.ambitiousdune-385a29b9.eastus.azurecontainerapps.io",
+    "http://localhost:3000"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
