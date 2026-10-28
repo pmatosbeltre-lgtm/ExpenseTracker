@@ -39,8 +39,12 @@ jobs:
       - name: Build & Push Frontend
         run: |
           IMAGE_TAG=${{ github.ref == 'refs/heads/main' && 'prod' || 'test' }}
-          BACKEND_URL=${{ github.ref == 'refs/heads/main' && 'https://app-backend-main.azurecontainerapps.io/gastos' || 'https://app-backend-testing.azurecontainerapps.io/gastos' }}
+
+          IF_MAIN="https://app-backend-main.ambitiousdune-385a29b9.eastus.azurecontainerapps.io/gastos"
+          IF_TEST="https://app-backend-testing.ambitiousdune-385a29b9.eastus.azurecontainerapps.io/gastos"
           
+          BACKEND_URL=${{ github.ref == 'refs/heads/main' && '$IF_MAIN' || '$IF_TEST' }}
+
           docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/gastos-frontend:$IMAGE_TAG ./frontend
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/gastos-frontend:$IMAGE_TAG
 
