@@ -53,7 +53,7 @@
 
 .form-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  grid-template-columns: 2fr 2fr 1fr 1fr 1fr auto;
   gap: 0.75rem;
   align-items: center;
 }
@@ -62,6 +62,12 @@
   .form-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.form-card h3 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 input, select, button {

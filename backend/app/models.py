@@ -6,6 +6,8 @@ class GastoModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     concepto = Column(String, nullable=False)
+    # Campo opcional para no romper registros creados antes de esta columna.
+    concepto2 = Column(String, nullable=True, default="")
     monto = Column(Float, nullable=False)
     tipo = Column(String, nullable=False)
     fecha = Column(Date, nullable=False)

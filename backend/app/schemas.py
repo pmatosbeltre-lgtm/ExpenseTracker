@@ -4,6 +4,7 @@ from datetime import date
 # Esquema base con los datos del gasto
 class GastoBase(BaseModel):
     concepto: str
+    concepto2: str = ""
     monto: float
     tipo: str  # "ingreso" o "gasto"
     fecha: date
