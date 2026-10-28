@@ -47,6 +47,8 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           acrName: ${{ secrets.ACR_NAME }}
+          acrUsername: ${{ secrets.ACR_USERNAME }}
+          acrPassword: ${{ secrets.ACR_PASSWORD }}
           containerAppName: ${{ github.ref == 'refs/heads/main' && 'app-backend-main' || 'app-backend-testing' }}
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ${{ secrets.ACR_LOGIN_SERVER }}/gastos-backend:${{ github.ref == 'refs/heads/main' && 'prod' || 'test' }}
@@ -55,6 +57,8 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           acrName: ${{ secrets.ACR_NAME }}
+          acrUsername: ${{ secrets.ACR_USERNAME }}
+          acrPassword: ${{ secrets.ACR_PASSWORD }}
           containerAppName: ${{ github.ref == 'refs/heads/main' && 'app-frontend-main' || 'app-frontend-testing' }}
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ${{ secrets.ACR_LOGIN_SERVER }}/gastos-frontend:${{ github.ref == 'refs/heads/main' && 'prod' || 'test' }}
